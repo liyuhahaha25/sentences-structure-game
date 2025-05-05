@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentence Structure Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .sentence {
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #score {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        #feedback {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .incorrect {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Sentence Structure Game</h1>
+        <div id="score">Score: 0</div>
+        <div class="sentence" id="current-sentence"></div>
+        <div class="options">
+            <button onclick="checkAnswer('simple')">Simple Sentence</button>
+            <button onclick="checkAnswer('compound')">Compound Sentence</button>
+            <button onclick="checkAnswer('complex')">Complex Sentence</button>
+            <button onclick="checkAnswer('compound-complex')">Compound-Complex Sentence</button>
+        </div>
+        <div id="feedback"></div>
+        <button onclick="nextSentence()">Next Sentence</button>
+    </div>
+
+    <script>
+        const sentences = [
+            {
+                text: "The cat sleeps on the mat.",
+                type: "simple"
+            },
+            {
+                text: "The sun was shining, and the birds were singing.",
+                type: "compound"
+            },
+            {
+                text: "When it rains, I stay inside.",
+                type: "complex"
+            },
+            {
+                text: "Although it was raining, we went out, and we had fun.",
+                type: "compound-complex"
+            },
+            {
+                text: "The children played in the park.",
+                type: "simple"
+            },
+            {
+                text: "I love coffee, but my sister prefers tea.",
+                type: "compound"
+            },
+            {
+                text: "Because the traffic was heavy, we arrived late.",
+                type: "complex"
+            },
+            {
+                text: "While I was studying, my phone rang, and my dog started barking.",
+                type: "compound-complex"
+            },
+            {
+                text: "The movie was exciting.",
+                type: "simple"
+            },
+            {
+                text: "She sings beautifully, and she dances gracefully.",
+                type: "compound"
+            },
+            {
+                text: "After we finish dinner, we will watch a movie.",
+                type: "complex"
+            },
+            {
+                text: "When the alarm went off, I woke up, but I fell asleep again.",
+                type: "compound-complex"
+            }
+        ];
+
+        let currentScore = 0;
+        let currentSentenceIndex = 0;
+        let shuffledSentences = [];
+
+        // Function to shuffle array
+        function shuffleArray(array) {
+            let shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function initGame() {
+            shuffledSentences = shuffleArray(sentences);
+            currentSentenceIndex = 0;
+            currentScore = 0;
+            document.getElementById('score').textContent = `Score: ${currentScore}`;
+            displaySentence();
+        }
+
+        function displaySentence() {
+            document.getElementById('current-sentence').textContent =
+                shuffledSentences[currentSentenceIndex].text;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = '';
+        }
+
+        function checkAnswer(answer) {
+            const correctType = shuffledSentences[currentSentenceIndex].type;
+            const feedbackElement = document.getElementById('feedback');
+
+            if (answer === correctType) {
+                currentScore++;
+                document.getElementById('score').textContent = `Score: ${currentScore}`;
+                feedbackElement.textContent = 'Correct!';
+                feedbackElement.className = 'correct';
+            } else {
+                feedbackElement.textContent = 'Incorrect, try again!';
+                feedbackElement.className = 'incorrect';
+            }
+        }
+
+        function nextSentence() {
+            currentSentenceIndex = (currentSentenceIndex + 1) % shuffledSentences.length;
+            displaySentence();
+        }
+
+        // Start game
+        initGame();
+    </script>
+</body>
+</html>
